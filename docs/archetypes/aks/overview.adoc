@@ -15,60 +15,57 @@ The toolkit provides an example configuration file for the AKS environment. You 
 
 If your copy of the toolkit is associated with the git repository, the link:../../../.gitignore[.gitignore] file is set to prevent your deployment `archetypes.json` file from being pushed to your code repository.
 
-== Run the deployment
+== AKS Archetype description
 
 All workload environments require a common set of operations, key vault, and virtual network resources before they can connect to the hub network and host workloads. The following steps will deploy these required resources.
 
 image:_media/placeholder_image.png[Before deploying the workload]
 
+Decisions you will need to make in a production AKS environment: 
+1. Where to grant required roles
+1. ACR - where will you put your images. If you have one, great. If not, ACR
+1. Enterprise - Audit is important - You can put in storage, la, event hub - you need to make a decision
+1. Role assignments / personas / RBAC
+
+== Run the deployment
 
 **NEED GUIDANCE FOR HOW TO RUN AS SINGLE DEPLOYMENT** 
 
 **NEED GUIDANCE FOR WHY YOU WOULD RUN THIS AS SEPERATE PERSONAS**
 
-
 === Step 1: Deploy operations and monitoring resources
 
 *Required role: SysOps*
 
-This step pre-provisions target resources that will be used to collect and analyze Azure Kubernetes Service (AKS) logging data. 
+This step pre-provisions target resources that will be used for collection and analysis Azure Kubernetes Service (AKS) logging data. 
 
 Later in the workload deployment process, kubernetes master node logging is enabled in the Azure Kubernetes Service (AKS) environment and logs are passed to these target resources for collection and analysis. More details on master node logging in AKS can be found https://docs.microsoft.com/en-us/azure/aks/view-master-logs[here]. 
+
+**NEED ADDITIONAL COMMENTS ON - WHY THREE TARGETS, PREVIEW FEATURE, CONTAINER INSIGHTS**
 
 Two modules are deployed in this step:
 
 - The `la` module creates the log analytics workspace and Azure storage account used for collecting and analyzing Azure Monitor logs. 
 - The `event-hub` module creates an Azure Event Hub namespace and default Event Hub, along with setting up the default authorization rules. 
 
-Start the `la` deployment by running the following command in the terminal or command-line interface:
+Start the module deployments by running the following commands based on the platform you are deploying from:
 
 .Docker
 [source,bash]
 python vdc.py create workload -path archetypes/aks/archetypes.json -m la
-
-.Linux/OSX
-[source,bash]
-python3 vdc.py create workload -path archetypes/aks/archetypes.json -m la
-
-.Windows
-[source,cmd]
-py vdc.py create workload -path archetypes/aks/archetypes.json -m la
-
-Then start the `event-hub` deployment by running the following command in the terminal or command-line interface:
-
-.Docker
-[source,bash]
 python vdc.py create workload -path archetypes/aks/archetypes.json -m event-hub
 
 .Linux/OSX
 [source,bash]
+python3 vdc.py create workload -path archetypes/aks/archetypes.json -m la
 python3 vdc.py create workload -path archetypes/aks/archetypes.json -m event-hub
 
 .Windows
 [source,cmd]
+py vdc.py create workload -path archetypes/aks/archetypes.json -m la
 py vdc.py create workload -path archetypes/aks/archetypes.json -m event-hub
 
-This deployment creates the `{org}-{deployment-name}-la-rg` resource group that hosts the resources described in the following table.
+These deployments creates the `{org}-{deployment-name}-la-rg` resource group that hosts the resources described in the following table.
 
 [options="header",cols="a,,"]
 |===
@@ -93,11 +90,14 @@ This deployment creates the `{org}-{deployment-name}-la-rg` resource group that 
 
 The next step is deploying the kv module, which creates a Key Vault resource.
 
- Secrets defined in the `archetype.json` as well as creating encryption keys (used in Azure Disk Encryption extension) are stored in the Key Vault and are used by other resources will use in subsequent deployment steps.
+Secrets defined in the `archetype.json` as well as creating encryption keys (used in Azure Disk Encryption extension) are stored in the Key Vault and are used by other resources will use in subsequent deployment steps.
+
+Secrets used for the AKS deployment (ssh, secure tiller, etc) - 
+   - CA cert for scoped keys
 
 These values are stored as secrets in the vault. To modify the default values for these passwords edit the link:../../../modules/kv/1.0/azureDeploy.parameters.json[Key Vault (kv) module parameters file] and update the secrets-object parameter.
 
-Start the `kv` deployment by running the following command in the terminal or command-line interface:
+Start the module deployment by running the following command based on the platform you are deploying from:
 
 .Docker
 [source,bash]
@@ -135,35 +135,24 @@ This step involves two resource deployments in the following order:
 - The `nsg` module creates the network security groups (NSGs) and Application security groups (ASGs) that secure the workload's virtual network. By default, the example workload net deployment creates a set of NSGs and ASGs compatible with an n-tier application, consisting of web, business, and data tiers. 
 - The `workload-net` module creates the workload's virtual network, along with setting up the default subnet and User Defined Routes (UDRs) used to route traffic to the shared services network. This deployment also creates the VNet peering that connects the shared services and workload networks.
 
-Start the `nsg` deployment by running the following command in the terminal or command-line interface:
+Start the module deployments by running the following commands based on the platform you are deploying from:
 
 .Docker
 [source,bash]
 python vdc.py create workload -path archetypes/aks/archetypes.json -m nsg
-
-.Linux/OSX
-[source,bash]
-python3 vdc.py create workload -path archetypes/aks/archetypes.json -m nsg
-
-.Windows
-[source,cmd]
-py vdc.py create workload -path archetypes/aks/archetypes.json -m nsg
-
-Then start the `workload-net` deployment by running the following command in the terminal or command-line interface:
-
-.Docker
-[source,bash]
 python vdc.py create workload -path archetypes/aks/archetypes.json -m workload-net
 
 .Linux/OSX
 [source,bash]
+python3 vdc.py create workload -path archetypes/aks/archetypes.json -m nsg
 python3 vdc.py create workload -path archetypes/aks/archetypes.json -m workload-net
 
 .Windows
 [source,cmd]
+py vdc.py create workload -path archetypes/aks/archetypes.json -m nsg
 py vdc.py create workload -path archetypes/aks/archetypes.json -m workload-net
 
-These deployment creates the `{org}-{deployment-name}-net-rg` resource group that hosts the resources described in the following table.
+These deployments creates the `{org}-{deployment-name}-net-rg` resource group that hosts the resources described in the following table.
 
 [options="header",cols="a,,a"]
 |===
@@ -190,15 +179,15 @@ These deployment creates the `{org}-{deployment-name}-net-rg` resource group tha
 | Storage location for virtual network diagnostic data.
 |===
 
-=== Step 4 Deploy Azure Container Registry
+=== Step 4: Deploy Azure Container Registry
 
-*Required role: SecOps*
+*Required role: SysOps*
 
 The next step is deploying the acr module, which creates an Azure Container Registry which is a private Docker registry in Azure for storing and managing your private Docker images.
 
 **NEED MORE DETAILS**
 
-Start the `acr` deployment by running the following command in the terminal or command-line interface:
+Start the module deployment by running the following command based on the platform you are deploying from:
 
 .Docker
 [source,bash]
