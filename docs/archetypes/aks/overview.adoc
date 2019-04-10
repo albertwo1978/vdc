@@ -19,7 +19,7 @@ If your copy of the toolkit is associated with the git repository, the link:../.
 
 All workload environments require a common set of operations, key vault, and virtual network resources before they can connect to the hub network and host workloads. The following steps will deploy these required resources.
 
-image:_media/workload-iaas-empty.png[Before deploying the workload]
+image:_media/placeholder_image.png[Before deploying the workload]
 
 
 **NEED GUIDANCE FOR HOW TO RUN AS SINGLE DEPLOYMENT** 
@@ -196,7 +196,7 @@ Once the monitoring, Key Vault, and virtual network resources are provisioned, y
 1. Azure Kubernetes Service (AKS) cluster - blah with https://some.useful.link.com[link].
 1. AKS Role Assignments - blah with https://some.useful.link.com[link].
 
-image:_media/workload-iaas-complete.png[Workload deployed into spoke network]
+image:_media/placveholder_image.png[Workload deployed into spoke network]
 
 === Deploy data tier
 
