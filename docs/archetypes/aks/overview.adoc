@@ -78,7 +78,7 @@ This deployment creates the `{org}-{deployment-name}-la-rg` resource group that 
 | Log Analytics
 | Log Analytics instance for monitoring the AKS cluster workload.
 
-| `{org}{deployment-name}diag{uniquestring}` (with any dashes removed)
+| `{org}{deployment-name}diag{uniquestring}` (dashes removed)
 | Storage Account
 | Storage Account for collecting AKS workload logs.
 
