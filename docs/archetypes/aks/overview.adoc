@@ -91,7 +91,9 @@ This deployment creates the `{org}-{deployment-name}-la-rg` resource group that 
 
 *Required role: SecOps*
 
-The next step is deploying the kv module, which creates a Key Vault resource and stores secrets defined in the `archetype.json` as well as creating encryption keys (used in Azure Disk Encryption extension), that other resources will use in subsequent deployment steps.
+The next step is deploying the kv module, which creates a Key Vault resource.
+
+ Secrets defined in the `archetype.json` as well as creating encryption keys (used in Azure Disk Encryption extension) are stored in the Key Vault and are used by other resources will use in subsequent deployment steps.
 
 These values are stored as secrets in the vault. To modify the default values for these passwords edit the link:../../../modules/kv/1.0/azureDeploy.parameters.json[Key Vault (kv) module parameters file] and update the secrets-object parameter.
 
@@ -188,15 +190,47 @@ These deployment creates the `{org}-{deployment-name}-net-rg` resource group tha
 | Storage location for virtual network diagnostic data.
 |===
 
-== Deploy workload resources
+=== Step 4 Deploy Azure Container Registry
 
-Once the monitoring, Key Vault, and virtual network resources are provisioned, your team can begin deploying the actual workload resources. Performing the following tasks provisions the following resoures resources in the target Azure Subscription:
+*Required role: SecOps*
 
-1. Azure Container Registry (ACR) - blah with https://some.useful.link.com[link].
+The next step is deploying the acr module, which creates an Azure Container Registry which is a private Docker registry in Azure for storing and managing your private Docker images.
+
+**NEED MORE DETAILS**
+
+Start the `acr` deployment by running the following command in the terminal or command-line interface:
+
+.Docker
+[source,bash]
+python vdc.py create workload -path archetypes/aks/archetypes.json -m acr
+
+.Linux/OSX
+[source,bash]
+python3 vdc.py create workload -path archetypes/aks/archetypes.json -m acr
+
+.Windows
+[source,cmd]
+py vdc.py create workload -path archetypes/aks/archetypes.json -m acr
+
+This deployment creates the `{org}-{deployment-name}-acr-rg` resource group that hosts the resources described in the following table.
+
+[options="header",cols="a,,"]
+|===
+| Resource | Type | Description
+
+| `{org}{deployment-name}acr` 
+| Azure Container Registry
+| Azure Container Registry for storing and managing private Docker images.
+|===
+
+== Deploy AKS workload resources
+
+Once the monitoring, Key Vault, virtual network resources and Azure Container Registry are provisioned, your team can begin deploying the AKS workload resources. Performing the following tasks provisions the following resoures resources in the target Azure Subscription:
+
 1. Azure Kubernetes Service (AKS) cluster - blah with https://some.useful.link.com[link].
 1. AKS Role Assignments - blah with https://some.useful.link.com[link].
 
-image:_media/placveholder_image.png[Workload deployed into spoke network]
+image:_media/placeholder_image.png[Workload deployed into spoke network]
 
 === Deploy data tier
 
