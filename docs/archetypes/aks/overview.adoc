@@ -119,7 +119,7 @@ This deployment creates the `{org}-{deployment-name}-kv-rg` resource group that 
 | Key Vault
 | Key Vault instance for the workload. One certificate deployed by default.
 
-| `{org}{deployment-name}kvdiag{uniquestring}` (with any dashes removed)
+| `{org}{deployment-name}kvdiag{uniquestring}` (dashes removed)
 | Storage account
 | Location of Key Vault audit logs.
 |===
@@ -183,7 +183,7 @@ These deployment creates the `{org}-{deployment-name}-net-rg` resource group tha
 | DDOS protection plan
 | Azure Standard DDOS protection plan.
 
-| `{org}{deployment-name}diag{uniquestring}` (with any dashes removed)
+| `{org}{deployment-name}diag{uniquestring}` (dashes removed)
 | Storage account 
 | Storage location for virtual network diagnostic data.
 |===
