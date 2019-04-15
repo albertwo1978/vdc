@@ -15,13 +15,45 @@ The toolkit provides an example configuration file for the AKS environment. You 
 
 If your copy of the toolkit is associated with the git repository, the link:../../../.gitignore[.gitignore] file is set to prevent your deployment `archetypes.json` file from being pushed to your code repository.
 
+The following table describes parameters in the `archetypes.json` that must be modified in order for the archetype to successfully deploy under default conditions. 
+
+Further modifications to default values can be made, and will alter the resulting archetype. These modifications are at the descretion of the individual deploying this archetype, and as such, not covered in this guide. 
+
+[options="header",cols="a,,"]
+|===
+| Parameter | Constraint | Description
+
+| `${general.organization-name}`
+| Unique Per Subscription
+| Used to construct resourece names for resources deployed in this archetype. 
+
+| `${general.tenant-id}`
+| Globally Unique
+| Tenant ID for Azure Active Directory (AAD) Tenant managing the Subscription where the archetype is being deployed. 
+
+| `${general.deployment-user-id}`
+| Uniqie to AAD Tenant
+| AAD user ID for user deploying the archetype. 
+
+| `${general.vdc-storage-account-name}`
+| Regionally Unique
+| Storage Account for configuration files and parameters used during deployment.
+
+| `${general.vdc-storage-account-rg}`
+| Unique Per Subscription
+| Resource Group for the previously defined Storage Account.
+|===
+
 == AKS Archetype description
 
-All workload environments require a common set of operations, key vault, and virtual network resources before they can connect to the hub network and host workloads. The following steps will deploy these required resources.
+An overview diagram of the resources deployed as part of this archetype: 
 
 image:_media/placeholder_image.png[Before deploying the workload]
 
-Decisions you will need to make in a production AKS environment: 
+Certain assumptions were made as part of the archetype deployment. Those assumptions are described below 
+
+The following decisions you will need to make in a production AKS environment: 
+
 1. Where to grant required roles
 1. ACR - where will you put your images. If you have one, great. If not, ACR
 1. Enterprise - Audit is important - You can put in storage, la, event hub - you need to make a decision
@@ -34,6 +66,8 @@ Decisions you will need to make in a production AKS environment:
 **NEED GUIDANCE FOR HOW TO RUN AS SINGLE DEPLOYMENT** 
 
 **NEED GUIDANCE FOR WHY YOU WOULD RUN THIS AS SEPERATE PERSONAS**
+
+All workload environments require a common set of operations, key vault, and virtual network resources before they can connect to the hub network and host workloads. The following steps will deploy these required resources.
 
 === Step 1: Deploy operations and monitoring resources
 
