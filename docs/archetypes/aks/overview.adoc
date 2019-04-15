@@ -123,13 +123,8 @@ Certain decisions were made as part of the archetype deployment and are based on
 you will need to make in a production AKS environment: 
 
 1. Where to grant required roles
-1. An https://docs.microsoft.com/en-us/azure/container-registry/container-registry-intro[Azure Container Registry] (ACR) is created as part of this archetype and deployed to the `{org}-{deployment-name}-acr-rg` resource group. ***NEED TO CHECK IF THE ACR IS WIRED FOR PERMISSIONS TO THE AKS CLUSTER - IF SO, ADD THAT COMMENT HERE***. 
-
-Organizations may have their own container registry for managing images. If so, the ACR can be safely deleted. If deploying individual modules, https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-4-deploy-azure-container-registry[Step 4] can be skipped with no impact to the remaining deployment. 
-
-
-- where will you put your images. If you have one, great. If not, ACR
-1. Enterprise - Audit is important - You can put in storage, la, event hub - you need to make a decision
+1. An https://docs.microsoft.com/en-us/azure/container-registry/container-registry-intro[Azure Container Registry] (ACR) is created as part of this archetype and deployed to the `{org}-{deployment-name}-acr-rg` resource group. ***NEED TO CHECK IF THE ACR IS WIRED FOR PERMISSIONS TO THE AKS CLUSTER - IF SO, ADD THAT COMMENT HERE***. Organizations may have their own container registry for managing images. If so, the ACR can be safely deleted. If deploying individual modules, https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-4-deploy-azure-container-registry[Step 4] can be skipped with no impact to the remaining deployment. 
+1. Azure Container Insights and https://docs.microsoft.com/en-us/azure/aks/view-master-logs[Kubernetes master node logging] are enabled by default on this archetype. Collected logs are sent to three different resource types (Azure Log Analytics, Azure Storage, and Azure Event Hub), all located in the `{org}-{deployment-name}-la-rg` resource group. Depending on your Enterprise logging requirements any/all of the resources can be safely deleted. If deploying individual modules, https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-4-deploy-azure-container-registry[Step 4] can be skipped with no impact to the remaining deployment. 
 1. Role assignments / personas / RBAC
 1. AAD RBAC integration w/ link
    - mapping AAD identities
