@@ -15,9 +15,7 @@ The toolkit provides an example configuration file for the AKS environment. You 
 
 If your copy of the toolkit is associated with the git repository, the link:../../../.gitignore[.gitignore] file is set to prevent your deployment `archetypes.json` file from being pushed to your code repository.
 
-The following table describes parameters in the `archetypes.json` that must be modified in order for the archetype to successfully deploy under default conditions. 
-
-Further modifications to default values can be made, and will alter the resulting archetype. These modifications are at the descretion of the individual deploying this archetype, and as such, not covered in this guide. 
+Modifications to the `archetypes.json` are required in order to successfully deploy the archetype. The following table describes the minimum modifications required to deploy under default conditions. Additional modifications can be made, but are not covered in this article. 
 
 [options="header",cols="a,,"]
 |===
@@ -89,11 +87,11 @@ Further modifications to default values can be made, and will alter the resultin
 
 | `${general.workload.kubernetes.aks-cluster-admin-rbac-role-id}`
 | Unique to AAD Tenant
-| Cluster Admin persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found below in the AKS archetype description. 
+| ***NEED DETAILS***. 
 
 | `${general.workload.kubernetes.aks-cluster-user-rbac-role-id}`
 | Unique to AAD Tenant
-| Cluster User persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found below in the AKS archetype description. 
+| ***NEED DETAILS***.
 
 | `${general.workload.kubernetes.reader-rbac-role-id}`
 | Unique to AAD Tenant
@@ -101,15 +99,15 @@ Further modifications to default values can be made, and will alter the resultin
 
 | `${general.workload.kubernetes.cluster-admin-group-id}`
 | Unique to AAD Tenant
-| ***NEED DETAILS***. 
+| Cluster Admin persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found below in the AKS archetype description. 
 
 | `${general.workload.kubernetes.noc-user-group-id}`
 | Unique to AAD Tenant
-| ***NEED DETAILS***. 
+| NOC persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found below in the AKS archetype description. 
 
 | `${general.workload.kubernetes.dev-user-group-id}`
 | Unique to AAD Tenant
-| ***NEED DETAILS***. 
+| Developer persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found below in the AKS archetype description. 
 |===
 
 == AKS Archetype description
