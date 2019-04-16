@@ -28,8 +28,22 @@ Organizations may have their own container registry for managing container image
 
 1. This deployment integrates kubernetes RBAC with Azure Active Directory and creates a base set of personas for managing resounces within the AKS cluster. A description of those personas and their permission levels can be found below:
 
-   - Cluster Admin Group
-   - Next 
+[options="header",cols="a,,"]
+|===
+| Persona | Kubernetes RBAC | Azure Resource RBAC
+
+| Cluster Admin
+| cluster-admin built-in cluster role
+| Reader access to AKS cluster resource groups
+
+| NOC
+| view built-in cluster role extended for resource listings
+| Reader access to AKS cluster resource groups
+
+| Developer
+| edit built-in cluster role bound to namespace
+| Reader access to AKS cluster resource groups
+|===
 
 == Create your archetype configuration file
 
@@ -115,15 +129,15 @@ Modifications to these `archetypes.json` parameters are required in order to suc
 
 | `${general.workload.kubernetes.cluster-admin-group-id}`
 | Unique to RBAC AAD Tenant
-| Cluster Admin persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found below in the AKS archetype description. 
+| Cluster Admin persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found in the https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#deployment-assumptions[deployment assumptions] section of this document. 
 
 | `${general.workload.kubernetes.noc-user-group-id}`
 | Unique to RBAC AAD Tenant
-| NOC persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found below in the AKS archetype description. 
+| NOC persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found in the https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#deployment-assumptions[deployment assumptions] section of this document. 
 
 | `${general.workload.kubernetes.dev-user-group-id}`
 | Unique to RBAC AAD Tenant
-| Developer persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found below in the AKS archetype description. 
+| Developer persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found in the https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#deployment-assumptions[deployment assumptions] section of this document. 
 |===
 
 == Run the deployment
