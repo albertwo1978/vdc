@@ -20,15 +20,15 @@ Please take the time to review these assumptions and determine the appropriate c
 1. *Container Registry* - An https://docs.microsoft.com/en-us/azure/container-registry/container-registry-intro[Azure Container Registry] (ACR) is created as part of this archetype and deployed to the `{org}-{deployment-name}-acr-rg` resource group. 
    - Image pull RBAC rights to the ACR instance have been granted to the cluster service principal. A reference to the AKS documentation can be found https://docs.microsoft.com/en-us/azure/container-registry/container-registry-auth-aks[here]. 
    - For Premium ACR deployments, service endpoints are also enabled. 
-   Organizations may have their own container registry for managing container images. If so, the ACR can be safely deleted. If deploying individual modules, https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-4-deploy-azure-container-registry[Step 4] can be skipped with no impact to the remaining deployment. 
+Organizations may have their own container registry for managing container images. If so, the ACR can be safely deleted. If deploying individual modules, https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-4-deploy-azure-container-registry[Step 4] can be skipped with no impact to the remaining deployment. 
 
-1. *Audit Logging* - Azure Container Insights and https://docs.microsoft.com/en-us/azure/aks/view-master-logs[Kubernetes master node logging] are enabled by default for this archetype. Collected logs are sent to three different resource types (Azure Log Analytics, Azure Storage, and Azure Event Hub), all created in the `{org}-{deployment-name}-la-rg` resource group. Depending on your Enterprise logging requirements any/all of the resources can be safely deleted. If deploying individual modules, https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-1-deploy-operations-and-monitoring-resources[Step 1] can be skipped with no impact to the remaining deployment. [CB/ALBERTWO REVIEW - Need to identify additional permissions per role required for AKS workload and update documentation/scripts.]
+1. *Audit Logging* - Azure Container Insights and https://docs.microsoft.com/en-us/azure/aks/view-master-logs[Kubernetes master node logging] are enabled by default for this archetype. Collected logs are sent to three different resource types (Azure Log Analytics, Azure Storage, and Azure Event Hub), all created in the `{org}-{deployment-name}-la-rg` resource group. Depending on your Enterprise logging requirements any/all of the resources can be safely deleted. If deploying individual modules, https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-1-deploy-operations-and-monitoring-resources[Step 1] can be skipped with no impact to the remaining deployment. [CB REVIEW - Need to confirm if this last assertion is correct or if there is a dependency on the la module.]
 
-1. *AAD Roles* - The Azure Virtual Datacenter Automation Toolkit encourages the use of separation of responsibilities using Azure Active Directory role-based access control (RBAC) to determine which users and teams can create and manage specific resources. A full description of these roles and their permissions can be found https://github.com/Azure/vdc/blob/master/docs/understand/roles.md[here]. The https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-by-step-archetype-deployment[ step-by-step archetype deployment] assumes that these user roles have been created and deployment is being performed by accounts using these permissions. 
+1. *AAD Roles* - The Azure Virtual Datacenter Automation Toolkit encourages the use of separation of responsibilities using Azure Active Directory role-based access control (RBAC) to determine which users and teams can create and manage specific resources. A full description of these roles and their permissions can be found https://github.com/Azure/vdc/blob/master/docs/understand/roles.md[here]. The https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-by-step-archetype-deployment[ step-by-step archetype deployment] assumes that these user roles have been created and deployments are being performed by accounts using these permissions. [CB/ALBERTWO REVIEW - Need to identify additional permissions per role required for AKS workload and update documentation/scripts.]
 
-1. This deployment integrates kubernetes RBAC with Azure Active Directory and creates a base set of personas for managing resounces in the AKS cluster. A description of those personas and their permission level can be found below:
+1. This deployment integrates kubernetes RBAC with Azure Active Directory and creates a base set of personas for managing resounces within the AKS cluster. A description of those personas and their permission levels can be found below:
 
-   - Cluster Admin
+   - Cluster Admin Group
    - Next 
 
 == Create your archetype configuration file
@@ -43,7 +43,7 @@ If your copy of the toolkit is associated with the git repository, the link:../.
 
 === Setting archetype parameters
 
-Modifications to the `archetypes.json` are required in order to successfully deploy the archetype. The following table describes the minimum modifications required to deploy under default conditions. Additional modifications can be made, but are not covered in this article. 
+Modifications to these `archetypes.json` parameters are required in order to successfully deploy the archetype. The following table describes the minimum modifications required to deploy under default conditions. Additional modifications can be made, but are not covered in this article. 
 
 [options="header",cols="a,,"]
 |===
@@ -91,7 +91,7 @@ Modifications to the `archetypes.json` are required in order to successfully dep
 
 | `${general.workload.kubernetes.service-principal-client-id}`
 | Unique to AAD Tenant
-| Service Principle ID used to deploying the AKS cluster. This ID must have ***NEED TO DEFINE APPROPRIATE PERMISSIONS***.
+| ID of the Service Principal used to represent the identity of the AKS cluster. This SPN is used by the cluster to provision resources through ARM. Steps on creating this SPN can be found https://docs.microsoft.com/en-us/azure/aks/kubernetes-service-principal#manually-create-a-service-principal[here].
 
 | `${general.workload.kubernetes.service-principal-client-secret}`
 | N/A
@@ -111,30 +111,18 @@ Modifications to the `archetypes.json` are required in order to successfully dep
 
 | `${general.workload.kubernetes.rbac-tenant}`
 | Globally Unique
-| AAD Tenant integrated with AKS for kubernetes RBAC authentication. A reference can be found https://docs.microsoft.com/en-us/azure/aks/aad-integration[here]. 
-
-| `${general.workload.kubernetes.aks-cluster-admin-rbac-role-id}`
-| Unique to AAD Tenant
-| ***NEED DETAILS***. 
-
-| `${general.workload.kubernetes.aks-cluster-user-rbac-role-id}`
-| Unique to AAD Tenant
-| ***NEED DETAILS***.
-
-| `${general.workload.kubernetes.reader-rbac-role-id}`
-| Unique to AAD Tenant
-| ***NEED DETAILS***. 
+| AAD Tenant where users and groups are stored that are allowed to interact with the AKS cluster through kubernetes RBAC integration. A reference can be found https://docs.microsoft.com/en-us/azure/aks/aad-integration[here]. 
 
 | `${general.workload.kubernetes.cluster-admin-group-id}`
-| Unique to AAD Tenant
+| Unique to RBAC AAD Tenant
 | Cluster Admin persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found below in the AKS archetype description. 
 
 | `${general.workload.kubernetes.noc-user-group-id}`
-| Unique to AAD Tenant
+| Unique to RBAC AAD Tenant
 | NOC persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found below in the AKS archetype description. 
 
 | `${general.workload.kubernetes.dev-user-group-id}`
-| Unique to AAD Tenant
+| Unique to RBAC AAD Tenant
 | Developer persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found below in the AKS archetype description. 
 |===
 
