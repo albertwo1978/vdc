@@ -20,7 +20,7 @@ Please take the time to review these assumptions and determine the appropriate c
 1. *Container Registry* - An https://docs.microsoft.com/en-us/azure/container-registry/container-registry-intro[Azure Container Registry] (ACR) is created as part of this archetype and deployed to the `{org}-{deployment-name}-acr-rg` resource group. 
    - Image pull RBAC rights to the ACR instance have been granted to the cluster service principal. A reference to the AKS documentation can be found https://docs.microsoft.com/en-us/azure/container-registry/container-registry-auth-aks[here]. 
    - For Premium ACR deployments, service endpoints are also enabled. +
-   +
+
 [ALBERTWO REVIEW - Formatting]
 Organizations may have their own container registry for managing container images. If so, the ACR can be safely deleted. If deploying individual modules, https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-4-deploy-azure-container-registry[Step 4] can be skipped with no impact to the remaining deployment. 
 
@@ -30,8 +30,8 @@ Organizations may have their own container registry for managing container image
 
 1. *Kubernetes personas* - This deployment integrates kubernetes RBAC with Azure Active Directory and creates a sample set of personas for managing AKS cluster resources. 
    - A description of kubernetes RBAC authorization can be found https://kubernetes.io/docs/reference/access-authn-authz/rbac/[here].
-   - The scripts that implement the role bindings for the sample personas can be found https://github.com/Azure/vdc/blob/knachimuthu/aks-workload/scripts/aks/create-cluster-rbac-role-bindings.sh[here] +
-   +
+   - The scripts that implement the role bindings for the sample personas can be found https://github.com/Azure/vdc/blob/knachimuthu/aks-workload/scripts/aks/create-cluster-rbac-role-bindings.sh[here]. +
+
 [ALBERTWO REVIEW - Formatting]   
 The table below provides a description of the sample personas and role bindings. As noted above, you should evaluate your specific requirements and make appropriate changes:
 
@@ -58,13 +58,13 @@ The toolkit provides an example configuration file for the AKS environment. You 
 
 1. Navigate to the toolkit's link:../../../archetypes/aks[archetypes/aks] folder.
 1. Make a copy of the `archetypes.test.json` and name the copy `archetypes.json`.
-1. Edit `archetypes.json` providing the subscription, organization, networking, and other configuration information that you want to use for your deployment. You will need to use some of the same values when creating the configuration for the shared services environment.
+1. Edit `archetypes.json` providing the subscription, organization, networking, and other configuration information that you want to use for your deployment. You will need to use some of the same values when creating the configuration for the shared services and on-premises environments.
 
 If your copy of the toolkit is associated with the git repository, the link:../../../.gitignore[.gitignore] file is set to prevent your deployment `archetypes.json` file from being pushed to your code repository.
 
 === Setting archetype parameters
 
-Modifications to these `archetypes.json` parameters are required in order to successfully deploy the archetype. The following table describes the minimum modifications required to deploy under default conditions. Additional modifications can be made, but are not covered in this article. 
+Modifications to these `archetypes.json` parameters are required in order to successfully deploy the archetype. The following table describes the minimum modifications required to deploy under default conditions. Additional modifications can be made, but are not covered in this document. 
 
 [options="header",cols="a,,"]
 |===
@@ -110,6 +110,8 @@ Modifications to these `archetypes.json` parameters are required in order to suc
 | N/A
 | Azure Region to deploy the archetype.
 
+[CB REVIEW - Need to add a new parameter for workload log analytics region]
+
 | `${general.workload.kubernetes.service-principal-client-id}`
 | Unique to AAD Tenant
 | ID of the Service Principal used to represent the identity of the AKS cluster. This SPN is used by the cluster to provision resources through ARM. Steps on creating this SPN can be found https://docs.microsoft.com/en-us/azure/aks/kubernetes-service-principal#manually-create-a-service-principal[here].
@@ -149,9 +151,7 @@ Modifications to these `archetypes.json` parameters are required in order to suc
 
 == Run the deployment
 
-=== Single step archetype deployment
-
-*Required permissions: Subscription Owner*
+=== Single step archetype deployment (Required permissions: Subscription Owner)
 
 This section performs an end-to-end deployment of the AKS archetype. It assumes the account performing the deployment has Owner permissions to the Subscription where the archetype is being deployed. 
 
@@ -193,13 +193,11 @@ This deployment creates the following resource groups and AKS archetype resource
 
 *STOP HERE* - Need a link to prevent user from deploying next section. 
 
-=== Step-by-step archetype deployment
+=== Step-by-step archetype deployment (Required permissions: Based on admin role)
 
 This section assumes the organization has separated administrative responsibilities into a core set of roles using role-based access control (RBAC). Please review the https://github.com/Azure/vdc/blob/master/docs/understand/roles.md[roles and permissions] section to understand those roles and their associated permissions. 
 
-==== Step 1: Deploy operations and monitoring resources
-
-*Required role: SysOps*
+==== Step 1: Deploy operations and monitoring resources (Required role: SysOps)
 
 This step pre-provisions target resources that will be used for collection and analysis Azure Kubernetes Service (AKS) logging data. 
 
@@ -248,9 +246,7 @@ These deployments creates the `{org}-{deployment-name}-la-rg` resource group tha
 | Event Hub Namespace with `{org}-diagnostics-eventhub` Event Hub for collecting AKS workload logs. 
 |===
 
-==== Step 2: Deploy Key Vault
-
-*Required role: SecOps*
+==== Step 2: Deploy Key Vault (Required role: SecOps)
 
 The next step is deploying the kv module, which creates a Key Vault resource.
 
@@ -290,9 +286,7 @@ This deployment creates the `{org}-{deployment-name}-kv-rg` resource group that 
 | Location of Key Vault audit logs.
 |===
 
-==== Step 3: Deploy the virtual network
-
-*Required role: NetOps*
+==== Step 3: Deploy the virtual network (Required role: NetOps)
 
 This step involves two resource deployments in the following order:
 
@@ -343,9 +337,7 @@ These deployments creates the `{org}-{deployment-name}-net-rg` resource group th
 | Storage location for virtual network diagnostic data.
 |===
 
-==== Step 4: Deploy Azure Container Registry
-
-*Required role: SysOps*
+==== Step 4: Deploy Azure Container Registry (Required role: SysOps)
 
 The next step is deploying the acr module, which creates an Azure Container Registry which is a private Docker registry in Azure for storing and managing your private Docker images.
 
@@ -376,9 +368,7 @@ This deployment creates the `{org}-{deployment-name}-acr-rg` resource group that
 | Azure Container Registry for storing and managing private Docker images.
 |===
 
-==== Step 5: Deploy AKS workload resources
-
-*Required role: SysOps*
+==== Step 5: Deploy AKS workload resources (Required role: SysOps)
 
 Once the monitoring, Key Vault, virtual network resources and Azure Container Registry are provisioned, your team can begin deploying the AKS workload resources. Performing the following tasks provisions the following resoures resources in the target Azure Subscription:
 
