@@ -217,7 +217,7 @@ py vdc.py create workload -path archetypes/aks/archetypes.json -m event-hub
 
 These deployments creates the `{org}-{deployment-name}-la-rg` resource group that hosts the resources described in the following table.
 
-[options="header",cols="a,,"]
+[options="header",cols="a,"]
 |==
 | Resource | Type | Description
 
