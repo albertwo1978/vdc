@@ -193,6 +193,8 @@ This deployment creates the following resource groups and AKS archetype resource
 
 Once completed, please reference the https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#aks-cluster-topology-view[AKS Cluster Topology Diagram] for a view of the deployed resources. 
 
+DO NOT proceed to the next deployment step if you have performed the Single Step Archetype Deployment. 
+
 === Step-by-step archetype deployment - Required permissions: Based on admin role
 
 This section assumes the organization has separated administrative responsibilities into a core set of roles using role-based access control (RBAC). Please review the https://github.com/Azure/vdc/blob/master/docs/understand/roles.md[roles and permissions] section to understand those roles and their associated permissions. 
