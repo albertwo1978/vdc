@@ -450,12 +450,12 @@ image:_media/placeholder_image.png[ALBERTWO REVIEW - Need diagram]
 As a final step, download kubectl and log into the newly created cluster: 
 
 ```bash
+# Install kubectl (if not already installed)
+sudo az aks install-cli
+
 # Set resources values
 RESOURCE_GROUP={org}-{deployment-name}-rg
 CLUSTER_NAME={org}-{deployment-name}-k8s
-
-# Install kubectl (if not already installed)
-sudo az aks install-cli
 
 # Get the Kubernetes cluster credentials
 az aks get-credentials --resource-group=$RESOURCE_GROUP --name=$CLUSTER_NAME
