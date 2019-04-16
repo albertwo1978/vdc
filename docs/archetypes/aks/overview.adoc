@@ -191,7 +191,7 @@ This deployment creates the following resource groups and AKS archetype resource
 | Primary resource group for AKS cluster resources.
 |===
 
-[ALBERTWO REVIEW - Need link / comment] *STOP HERE* - Need a link to prevent user from deploying next section. 
+Once completed, please reference the https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#aks-cluster-topology-view[AKS Cluster Topology Diagram] for a view of the deployed resources. 
 
 === Step-by-step archetype deployment - Required permissions: Based on admin role
 
@@ -250,7 +250,7 @@ These deployments creates the `{org}-{deployment-name}-la-rg` resource group tha
 
 The next step is deploying the kv module, which creates a Key Vault resource.
    - The key vault resource is added as a service endpoint to the AKS virtual network.
-   - A demo CA cert is created by OpenSSL and stored in the key vault.
+   - A demo CA cert is created by OpenSSL and stored in the key vault. [ALBERTWO REVIEW - Sync with Kirk about Digicert to replace OpenSSL cert.]
 
 Secrets defined in the `archetype.json` as well as creating encryption keys (used in Azure Disk Encryption extension) are stored in the Key Vault and are used by other resources will use in subsequent deployment steps.
 
