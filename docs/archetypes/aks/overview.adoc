@@ -187,23 +187,23 @@ This deployment creates the following resource groups and AKS archetype resource
 | `{org}-{deployment-name}-arc-rg` 
 | Azure container registry for image management. 
 
-| `{org}-{deployment-name}-aks` 
-| Primare resource group for AKS cluster resources.
+| `{org}-{deployment-name}-rg` 
+| Primary resource group for AKS cluster resources.
 |===
 
-*STOP HERE* - Need a link to prevent user from deploying next section. 
+[ALBERTWO REVIEW - Need link / comment] *STOP HERE* - Need a link to prevent user from deploying next section. 
 
 === Step-by-step archetype deployment - Required permissions: Based on admin role
 
 This section assumes the organization has separated administrative responsibilities into a core set of roles using role-based access control (RBAC). Please review the https://github.com/Azure/vdc/blob/master/docs/understand/roles.md[roles and permissions] section to understand those roles and their associated permissions. 
+
+If your account has Subscription Owner permissions you can deploy all modules with your account. 
 
 ==== Step 1: Deploy operations and monitoring resources - Required role: SysOps
 
 This step pre-provisions target resources that will be used for collection and analysis Azure Kubernetes Service (AKS) logging data. 
 
 Later in the workload deployment process, kubernetes master node logging is enabled in the Azure Kubernetes Service (AKS) environment and logs are passed to these target resources for collection and analysis. More details on master node logging in AKS can be found https://docs.microsoft.com/en-us/azure/aks/view-master-logs[here]. 
-
-**NEED ADDITIONAL COMMENTS ON - WHY THREE TARGETS, PREVIEW FEATURE, CONTAINER INSIGHTS**
 
 Two modules are deployed in this step:
 
@@ -249,6 +249,8 @@ These deployments creates the `{org}-{deployment-name}-la-rg` resource group tha
 ==== Step 2: Deploy Key Vault - Required role: SecOps
 
 The next step is deploying the kv module, which creates a Key Vault resource.
+   - The key vault resource is added as a service endpoint to the AKS virtual network.
+   - A demo CA cert is created by OpenSSL and stored in the key vault.
 
 Secrets defined in the `archetype.json` as well as creating encryption keys (used in Azure Disk Encryption extension) are stored in the Key Vault and are used by other resources will use in subsequent deployment steps.
 
@@ -341,7 +343,7 @@ These deployments creates the `{org}-{deployment-name}-net-rg` resource group th
 
 The next step is deploying the acr module, which creates an Azure Container Registry which is a private Docker registry in Azure for storing and managing your private Docker images.
 
-**NEED MORE DETAILS**
+[ALBERTWO REVIEW - Finish comments here]
 
 Start the module deployment by running the following command based on the platform you are deploying from:
 
@@ -368,12 +370,71 @@ This deployment creates the `{org}-{deployment-name}-acr-rg` resource group that
 | Azure Container Registry for storing and managing private Docker images.
 |===
 
-==== Step 5: Deploy AKS workload resources - Required role: SysOps
+==== Step 5: Deploy AKS workload resources - Required role: ??? [CB REVIEW - Account needs Sub Owner permissions - ANNA FEEDBACK - Can lesser permissions be used?]
 
-Once the monitoring, Key Vault, virtual network resources and Azure Container Registry are provisioned, your team can begin deploying the AKS workload resources. Performing the following tasks provisions the following resoures resources in the target Azure Subscription:
+Once the monitoring, Key Vault, virtual network resources and Azure Container Registry are provisioned, your team can begin deploying the AKS workload resources. 
 
-1. Azure Kubernetes Service (AKS) cluster - blah with https://some.useful.link.com[link].
-1. AKS Role Assignments - blah with https://some.useful.link.com[link].
+This step involves multiple resource deployments in the following order:
 
-image:_media/placeholder_image.png[Workload deployed into spoke network]
+- The `aks` module creates the AKS Cluster resource, enabled monitoring and creates an Azure Firewall rule to enable egress to endpoints required for AKS cluster functionality. 
+- The `role-assignments` module creates the required RBAC grants to the AKS cluster resource group `{org}-{deployment-name}-rg`.
+- The `aks-node-role-assignments` module creates the required RBAC grants to the auto-generated AKS cluster resource group.
+- The `permissions-scripts-pre-reqs` module runs scripts necessary to run custom scripts.
+- The `scripts-pre-reqs` module runs scripts necessary to run custom scripts.
+- The `create-ca-cert` module creates a CA cert using OpenSSL and places it in the key vault created in https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-2-deploy-key-vault---required-role-secops[Step 3].
+- The `create-cluster-rbac-role-bindings` module creates the AKS cluster roles and cluster role bindings for kubernetes RBAC integration with Azure Active Directory. 
+
+Start the module deployments by running the following commands based on the platform you are deploying from:
+
+.Docker
+[source,bash]
+python vdc.py create workload -path archetypes/aks/archetypes.json -m aks
+python vdc.py create workload -path archetypes/aks/archetypes.json -m role-assignments
+python vdc.py create workload -path archetypes/aks/archetypes.json -m aks-node-role-assignments
+python vdc.py create workload -path archetypes/aks/archetypes.json -m aks-node-role-assignments
+python vdc.py create workload -path archetypes/aks/archetypes.json -m scripts-pre-reqs
+python vdc.py create workload -path archetypes/aks/archetypes.json -m create-ca-cert
+python vdc.py create workload -path archetypes/aks/archetypes.json -m create-cluster-rbac-role-bindings
+
+.Linux/OSX
+[source,bash]
+python3 vdc.py create workload -path archetypes/aks/archetypes.json -m aks
+python3 vdc.py create workload -path archetypes/aks/archetypes.json -m role-assignments
+python3 vdc.py create workload -path archetypes/aks/archetypes.json -m aks-node-role-assignments
+python3 vdc.py create workload -path archetypes/aks/archetypes.json -m aks-node-role-assignments
+python3 vdc.py create workload -path archetypes/aks/archetypes.json -m scripts-pre-reqs
+python3 vdc.py create workload -path archetypes/aks/archetypes.json -m create-ca-cert
+python3 vdc.py create workload -path archetypes/aks/archetypes.json -m create-cluster-rbac-role-bindings
+
+.Windows
+[source,cmd]
+py vdc.py create workload -path archetypes/aks/archetypes.json -m aks
+py vdc.py create workload -path archetypes/aks/archetypes.json -m role-assignments
+py vdc.py create workload -path archetypes/aks/archetypes.json -m aks-node-role-assignments
+py vdc.py create workload -path archetypes/aks/archetypes.json -m aks-node-role-assignments
+py vdc.py create workload -path archetypes/aks/archetypes.json -m scripts-pre-reqs
+py vdc.py create workload -path archetypes/aks/archetypes.json -m create-ca-cert
+py vdc.py create workload -path archetypes/aks/archetypes.json -m create-cluster-rbac-role-bindings
+
+These deployments creates the `{org}-{deployment-name}-rg` resource group that hosts the resources described in the following table.
+
+[options="header",cols="a,,a"]
+|===
+| Resource | Type | Description
+
+[ALBERTWO REVIEW - Need to finish this table]
+| `resource1`
+| resource1
+| Description1.
+
+| `resource2`
+| resource2
+| Description2.
+|===
+
+== AKS cluster topology view
+
+An AKS cluster topology diagram of the cluster created as part of this archetype: 
+
+image:_media/placeholder_image.png[ALBERTWO REVIEW - Need diagram]
 
