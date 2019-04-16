@@ -110,7 +110,9 @@ Modifications to these `archetypes.json` parameters are required in order to suc
 | N/A
 | Azure Region to deploy the archetype.
 
-[CB REVIEW - Need to add a new parameter for workload log analytics region]
+| `${general.workload.log-analytics.region}`
+| N/A
+| Azure Region to deploy Azure Log Analytics (verify supported regions before modifying).
 
 | `${general.workload.kubernetes.service-principal-client-id}`
 | Unique to AAD Tenant
