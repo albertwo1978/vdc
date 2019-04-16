@@ -15,6 +15,8 @@ The toolkit provides an example configuration file for the AKS environment. You 
 
 If your copy of the toolkit is associated with the git repository, the link:../../../.gitignore[.gitignore] file is set to prevent your deployment `archetypes.json` file from being pushed to your code repository.
 
+=== Setting archetype parameters
+
 Modifications to the `archetypes.json` are required in order to successfully deploy the archetype. The following table describes the minimum modifications required to deploy under default conditions. Additional modifications can be made, but are not covered in this article. 
 
 [options="header",cols="a,,"]
@@ -128,7 +130,7 @@ Please take the time to review these assumptions and determine the appropriate c
 
 1. *Audit Logging* - Azure Container Insights and https://docs.microsoft.com/en-us/azure/aks/view-master-logs[Kubernetes master node logging] are enabled by default for this archetype. Collected logs are sent to three different resource types (Azure Log Analytics, Azure Storage, and Azure Event Hub), all created in the `{org}-{deployment-name}-la-rg` resource group. Depending on your Enterprise logging requirements any/all of the resources can be safely deleted. If deploying individual modules, https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-1-deploy-operations-and-monitoring-resources[Step 1] can be skipped with no impact to the remaining deployment. 
 
-1. Role assignments / personas / RBAC - Archetype Role Assignments - Not AKS
+1. The Azure Virtual Datacenter Automation Toolkit encourages the use of separation of responsibilities using Azure Active Directory role-based access control (RBAC) to determine which users and teams can create and manage specific resources. A full description of these roles and their permissions can be found https://github.com/Azure/vdc/blob/master/docs/understand/roles.md[here]. The https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-by-step-archetype-deployment[ step-by-step archetype deployment] assumes that these user roles have been created and deployment is being performed by an account using these permissions. 
 
 1. AAD RBAC integration w/ link
    - mapping AAD identities
@@ -177,11 +179,11 @@ These deployments creates the following resource groups that hosts the AKS arche
 | Primare resource group for AKS cluster resources.
 |===
 
+*STOP HERE* - Need a link to prevent user from deploying next section. 
+
 === Step-by-step archetype deployment
 
-This step assumes the organization has separated administrative responsibilities using role-based access control (RBAC). A description of the assumed roles and their respective permissions can be found https://github.com/Azure/vdc/blob/knachimuthu/aks-workload/docs/understand/roles.md[here]. 
-
-The Azure Virtual Datacenter Automation Toolkit encourages the use of separation of responsibilities using role-based access control (RBAC) to determine which users and teams can create and manage specific resources.
+This step assumes the organization has separated administrative responsibilities into a core set of roles using role-based access control (RBAC). Please review the https://github.com/Azure/vdc/blob/master/docs/understand/roles.md[roles and permissions] section to understand those roles and their associated permissions. 
 
 ==== Step 1: Deploy operations and monitoring resources
 
@@ -362,7 +364,9 @@ This deployment creates the `{org}-{deployment-name}-acr-rg` resource group that
 | Azure Container Registry for storing and managing private Docker images.
 |===
 
-==== Deploy AKS workload resources
+==== Step 5: Deploy AKS workload resources
+
+*Required role: SysOps*
 
 Once the monitoring, Key Vault, virtual network resources and Azure Container Registry are provisioned, your team can begin deploying the AKS workload resources. Performing the following tasks provisions the following resoures resources in the target Azure Subscription:
 
@@ -371,6 +375,3 @@ Once the monitoring, Key Vault, virtual network resources and Azure Container Re
 
 image:_media/placeholder_image.png[Workload deployed into spoke network]
 
-==== Deploy AKS cluster
-
-More to follow... 
