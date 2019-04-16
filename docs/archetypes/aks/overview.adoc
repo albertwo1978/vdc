@@ -1,7 +1,7 @@
 = Archetype: Azure Kubernetes Services (AKS) architecture
 :toc:
 :toc-placement: auto
-:toclevels: 2
+:toclevels: 3
 
 This archetype is based on the https://docs.microsoft.com/azure/architecture/guide/architecture-styles/aks[AKS application] reference architecture using Azure Kubernetes Services (AKS). The archetype deploys a single AKS cluster to host linux based containerized workloads.
 
