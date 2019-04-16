@@ -110,7 +110,9 @@ Modifications to these `archetypes.json` parameters are required in order to suc
 | N/A
 | Azure Region to deploy the archetype.
 
-[CB REVIEW - Need to add a new parameter for workload log analytics region]
+| `${general.workload.log-analytics.region}`
+| N/A
+| Azure Region to deploy Azure Log Analytics (verify supported regions before modifying).
 
 | `${general.workload.kubernetes.service-principal-client-id}`
 | Unique to AAD Tenant
@@ -443,15 +445,19 @@ An AKS cluster topology diagram of the cluster created as part of this archetype
 
 image:_media/placeholder_image.png[ALBERTWO REVIEW - Need diagram]
 
-== Logging into AKS Cluster
+== Log into AKS Cluster
 
 As a final step, download kubectl and log into the newly created cluster: 
 
 ```bash
-#  Install kubectl
+# Set resources values
+$RESOURCE_GROUP=`{org}-{deployment-name}-rg`
+$CLUSTER_NAME=`{org}-{deployment-name}-k8s`
+
+# Install kubectl
 sudo az aks install-cli
 
 # Get the Kubernetes cluster credentials
-az aks get-credentials --resource-group=`{org}-{deployment-name}-rg` --name=$`{org}-{deployment-name}-k8s` 
+az aks get-credentials --resource-group=$RESOURCE_GROUP --name=$CLUSTER_NAME
 
 ```
