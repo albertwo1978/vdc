@@ -71,19 +71,19 @@ Modifications to these `archetypes.json` parameters are required in order to suc
 | Parameter | Constraint | Description
 
 | `${general.organization-name}`
-| Unique per Subscription
+| Unique per subscription
 | Used to construct resource names for resources deployed in this archetype. 
 
 | `${general.tenant-id}`
-| Globally Unique
+| Globally unique
 | Tenant ID for Azure Active Directory (AAD) Tenant managing the subscription where the archetype is being deployed. 
 
 | `${general.deployment-user-id}`
-| Unique to AAD Tenant
+| Unique to AAD tenant
 | AAD user ID for user deploying the archetype. 
 
 | `${general.vdc-storage-account-name}`
-| Regionally Unique
+| Regionally unique
 | Storage Account for configuration files and parameters used during deployment.
 
 | `${general.vdc-storage-account-rg}`
@@ -91,51 +91,51 @@ Modifications to these `archetypes.json` parameters are required in order to suc
 | Resource Group for the previously defined Storage Account.
 
 | `${general.on-premises}`
-| N/A
+|
 | Parameters must match the deployment parameters for the on-premises resources.
 
 | `${general.shared-services}`
-| N/A
+|
 | Parameters must match the deployment parameters for the shared services archetype.
 
 | `${general.workload.deployment-name}`
-| N/A
+|
 | Name assigned to the deployment of this archetype (for reference and troubleshooting).
 
 | `${general.workload.subscription-id}`
-| Globally Unique
+| Globally unique
 | Subscription ID where the archetype will be deployed.
 
 | `${general.workload.region}`
-| N/A
+|
 | Azure Region to deploy the archetype.
 
 | `${general.workload.log-analytics.region}`
-| N/A
+|
 | Azure Region to deploy Azure Log Analytics (verify supported regions before modifying).
 
 | `${general.workload.kubernetes.service-principal-client-id}`
-| Unique to AAD Tenant
+| Unique to AAD tenant
 | ID of the Service Principal used to represent the identity of the AKS cluster. This SPN is used by the cluster to provision resources through ARM. Steps on creating this SPN can be found https://docs.microsoft.com/azure/aks/kubernetes-service-principal#manually-create-a-service-principal[here].
 
 | `${general.workload.kubernetes.service-principal-client-secret}`
-| N/A
+|
 | Secret for the previously created AAD service principal.
 
 | `${general.workload.kubernetes.rbac-server-appid}`
-| Unique to AAD Tenant
+| Unique to AAD tenant
 | ID for server application created for integration with Azure AD. A reference for creating this identity can be found https://docs.microsoft.com/azure/aks/aad-integration#create-server-application[here]. 
 
 | `${general.workload.kubernetes.rbac-server-secret}`
-| N/A
+|
 | Secret for the previously created AAD server application.
 
 | `${general.workload.kubernetes.rbac-client-appid}`
-| Unique to AAD Tenant
+| Unique to AAD tenant
 | ID for client application created for integration with Azure AD. A reference for creating this identity can be found https://docs.microsoft.com/azure/aks/aad-integration#create-client-application[here]. 
 
 | `${general.workload.kubernetes.rbac-tenant}`
-| Globally Unique
+| Globally unique
 | AAD Tenant where users and groups are stored that are allowed to interact with the AKS cluster through kubernetes RBAC integration. A reference can be found https://docs.microsoft.com/azure/aks/aad-integration[here]. 
 
 | `${general.workload.kubernetes.cluster-admin-group-id}`
