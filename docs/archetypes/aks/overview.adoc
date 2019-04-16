@@ -157,8 +157,8 @@ py vdc.py create workload -path archetypes/aks/archetypes.json
 
 These deployments creates the following resource groups that hosts the AKS archetype resources.
 
-[options="header",cols="a,,"]
-|==
+[options="header",cols="a,"]
+|===
 | Resource Group | Description
 
 | `{org}-{deployment-name}-la-rg` 
@@ -175,7 +175,7 @@ These deployments creates the following resource groups that hosts the AKS arche
 
 | `{org}-{deployment-name}-aks` 
 | Primare resource group for AKS cluster resources.
-|==
+|===
 
 === Step-by-step archetype deployment
 
