@@ -20,7 +20,7 @@ Please take the time to review these assumptions and determine the appropriate c
 1. *Container Registry* - An https://docs.microsoft.com/en-us/azure/container-registry/container-registry-intro[Azure Container Registry] (ACR) is created as part of this archetype and deployed to the `{org}-{deployment-name}-acr-rg` resource group. 
    - Image pull RBAC rights to the ACR instance have been granted to the cluster service principal. A reference to the AKS documentation can be found https://docs.microsoft.com/en-us/azure/container-registry/container-registry-auth-aks[here].  
    - For Premium ACR deployments, service endpoints are also enabled. +
-
++
  [ALBERTWO REVIEW - Formatting]   
 Organizations may have their own container registry for managing container images. If so, the ACR can be safely deleted. If deploying individual modules, https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-4-deploy-azure-container-registry[Step 4] can be skipped with no impact to the remaining deployment. 
 
@@ -31,7 +31,7 @@ Organizations may have their own container registry for managing container image
 1. *Kubernetes personas* - This deployment integrates kubernetes RBAC with Azure Active Directory and creates a sample set of personas for managing AKS cluster resources. 
    - A description of kubernetes RBAC authorization can be found https://kubernetes.io/docs/reference/access-authn-authz/rbac/[here].
    - The scripts that implement the role bindings for the sample personas can be found https://github.com/Azure/vdc/blob/knachimuthu/aks-workload/scripts/aks/create-cluster-rbac-role-bindings.sh[here]. +
-
++
 [ALBERTWO REVIEW - Formatting]   
 The table below provides a description of the sample personas and role bindings. As noted above, you should evaluate your specific requirements and make appropriate changes:
 
@@ -451,8 +451,8 @@ As a final step, download kubectl and log into the newly created cluster:
 
 ```bash
 # Set resources values
-$RESOURCE_GROUP=`{org}-{deployment-name}-rg`
-$CLUSTER_NAME=`{org}-{deployment-name}-k8s`
+$RESOURCE_GROUP={org}-{deployment-name}-rg
+$CLUSTER_NAME={org}-{deployment-name}-k8s
 
 # Install kubectl
 sudo az aks install-cli
