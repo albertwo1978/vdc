@@ -3,7 +3,34 @@
 :toc-placement: auto
 :toclevels: 3
 
-This archetype is based on the https://docs.microsoft.com/azure/architecture/guide/architecture-styles/aks[AKS application] reference architecture using Azure Kubernetes Services (AKS). The archetype deploys a single AKS cluster to host linux based containerized workloads.
+This archetype is based on the https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/n-tier[CB REVIEW - An equivalent AKS architecture guide does not exist] reference architecture using Azure Kubernetes Services (AKS). The archetype deploys a single AKS cluster to host linux based containerized workloads.
+
+== AKS Archetype description
+
+An overview diagram of the Azure resources and identities created as part of this archetype: 
+
+image:_media/placeholder_image.png[ALBERTWO REVIEW - Need diagram]
+
+=== Deployment assumptions
+
+Assumptions were made while defining this archetype. These assumptions are based on patterns identified while working with customers actively deploying AKS workloads in their production environments and may not reflect your organization's individual requirements. 
+
+Please take the time to review these assumptions and determine the appropriate course of action while planning your production AKS implementation. 
+
+1. *Container Registry* - An https://docs.microsoft.com/en-us/azure/container-registry/container-registry-intro[Azure Container Registry] (ACR) is created as part of this archetype and deployed to the `{org}-{deployment-name}-acr-rg` resource group. 
+   - Image pull RBAC rights to the ACR instance have been granted to the cluster service principal. A reference to the AKS documentation can be found https://docs.microsoft.com/en-us/azure/container-registry/container-registry-auth-aks[here]. 
+   - For Premium ACR deployments, service endpoints are also enabled. 
+   
+   Organizations may have their own container registry for managing images. If so, the ACR can be safely deleted. If deploying individual modules, https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-4-deploy-azure-container-registry[Step 4] can be skipped with no impact to the remaining deployment. 
+
+1. *Audit Logging* - Azure Container Insights and https://docs.microsoft.com/en-us/azure/aks/view-master-logs[Kubernetes master node logging] are enabled by default for this archetype. Collected logs are sent to three different resource types (Azure Log Analytics, Azure Storage, and Azure Event Hub), all created in the `{org}-{deployment-name}-la-rg` resource group. Depending on your Enterprise logging requirements any/all of the resources can be safely deleted. If deploying individual modules, https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-1-deploy-operations-and-monitoring-resources[Step 1] can be skipped with no impact to the remaining deployment. [CB/ALBERTWO REVIEW - Need to identify additional permissions per role required for AKS workload and update documentation/scripts.]
+
+1. *AAD Roles* - The Azure Virtual Datacenter Automation Toolkit encourages the use of separation of responsibilities using Azure Active Directory role-based access control (RBAC) to determine which users and teams can create and manage specific resources. A full description of these roles and their permissions can be found https://github.com/Azure/vdc/blob/master/docs/understand/roles.md[here]. The https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-by-step-archetype-deployment[ step-by-step archetype deployment] assumes that these user roles have been created and deployment is being performed by accounts using these permissions. 
+
+1. This deployment integrates kubernetes RBAC with Azure Active Directory and creates a base set of personas for managing resounces in the AKS cluster. A description of those personas and their permission level can be found below:
+
+   - Cluster Admin
+   - Next 
 
 == Create your archetype configuration file
 
@@ -111,33 +138,6 @@ Modifications to the `archetypes.json` are required in order to successfully dep
 | Unique to AAD Tenant
 | Developer persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found below in the AKS archetype description. 
 |===
-
-== AKS Archetype description
-
-An overview diagram of the Azure resources and identities created as part of this archetype: 
-
-image:_media/placeholder_image.png[Before deploying the workload]
-
-=== Deployment assumptions
-
-Assumptions were made while defining this archetype. These assumptions are based on patterns identified while working with customers actively deploying AKS workloads in their production environments and may not properly reflect your organization's individual requirements. 
-
-Please take the time to review these assumptions and determine the appropriate course of action while planning your production AKS implementation. 
-
-1. Where to grant required roles
-
-1. *Container Registry* - An https://docs.microsoft.com/en-us/azure/container-registry/container-registry-intro[Azure Container Registry] (ACR) is created as part of this archetype and deployed to the `{org}-{deployment-name}-acr-rg` resource group. ***NEED TO CHECK IF THE ACR IS WIRED FOR PERMISSIONS TO THE AKS CLUSTER - IF SO, ADD THAT COMMENT HERE***. Organizations may have their own container registry for managing images. If so, the ACR can be safely deleted. If deploying individual modules, https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-4-deploy-azure-container-registry[Step 4] can be skipped with no impact to the remaining deployment. 
-
-1. *Audit Logging* - Azure Container Insights and https://docs.microsoft.com/en-us/azure/aks/view-master-logs[Kubernetes master node logging] are enabled by default for this archetype. Collected logs are sent to three different resource types (Azure Log Analytics, Azure Storage, and Azure Event Hub), all created in the `{org}-{deployment-name}-la-rg` resource group. Depending on your Enterprise logging requirements any/all of the resources can be safely deleted. If deploying individual modules, https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-1-deploy-operations-and-monitoring-resources[Step 1] can be skipped with no impact to the remaining deployment. 
-
-1. *AAD Roles* - The Azure Virtual Datacenter Automation Toolkit encourages the use of separation of responsibilities using Azure Active Directory role-based access control (RBAC) to determine which users and teams can create and manage specific resources. A full description of these roles and their permissions can be found https://github.com/Azure/vdc/blob/master/docs/understand/roles.md[here]. The https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-by-step-archetype-deployment[ step-by-step archetype deployment] assumes that these user roles have been created and deployment is being performed by accounts using these permissions. 
-
-1. This deployment integrates kubernetes RBAC with Azure Active Directory and creates a base set of personas for managing resounces in the AKS cluster. can 
-
-A description of those personas and their permission level can be found below:
-
-   - Cluster Admin
-   - Next 
 
 == Run the deployment
 
