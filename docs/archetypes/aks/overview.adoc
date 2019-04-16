@@ -158,7 +158,7 @@ py vdc.py create workload -path archetypes/aks/archetypes.json
 These deployments creates the following resource groups that hosts the AKS archetype resources.
 
 [options="header",cols="a,,"]
-|===
+|==
 | Resource Group | Description
 
 | `{org}-{deployment-name}-la-rg` 
@@ -175,7 +175,7 @@ These deployments creates the following resource groups that hosts the AKS arche
 
 | `{org}-{deployment-name}-aks` 
 | Primare resource group for AKS cluster resources.
-|===
+|==
 
 === Step-by-step archetype deployment
 
@@ -217,8 +217,8 @@ py vdc.py create workload -path archetypes/aks/archetypes.json -m event-hub
 
 These deployments creates the `{org}-{deployment-name}-la-rg` resource group that hosts the resources described in the following table.
 
-[options="header",cols="a,"]
-|==
+[options="header",cols="a,,"]
+|===
 | Resource | Type | Description
 
 | `{org}-{deployment-name}-la`
@@ -232,7 +232,7 @@ These deployments creates the `{org}-{deployment-name}-la-rg` resource group tha
 | `{org}-{deployment-name}-la`
 | Event Hub Namespace
 | Event Hub Namespace with `{org}-diagnostics-eventhub` Event Hub for collecting AKS workload logs. 
-|==
+|===
 
 ==== Step 2: Deploy Key Vault
 
