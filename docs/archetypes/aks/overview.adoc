@@ -370,7 +370,8 @@ This deployment creates the `{org}-{deployment-name}-acr-rg` resource group that
 | Azure Container Registry for storing and managing private Docker images.
 |===
 
-==== Step 5: Deploy AKS workload resources - Required role: ??? [CB REVIEW - Account needs Sub Owner permissions - ANNA FEEDBACK - Can lesser permissions be used?]
+==== Step 5: Deploy AKS workload resources - Required role: ??? 
+[CB REVIEW - Account needs Sub Owner permissions - ANNA FEEDBACK - Can lesser permissions be used?]
 
 Once the monitoring, Key Vault, virtual network resources and Azure Container Registry are provisioned, your team can begin deploying the AKS workload resources. 
 
