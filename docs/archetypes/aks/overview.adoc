@@ -76,7 +76,7 @@ Modifications to these `archetypes.json` parameters are required in order to suc
 
 | `${general.tenant-id}`
 | Globally unique
-| Tenant ID for Azure Active Directory (AAD) Tenant managing the subscription where the archetype is being deployed. 
+| Tenant ID for Azure Active Directory (AAD) tenant managing the subscription where the archetype is being deployed. 
 
 | `${general.deployment-user-id}`
 | Unique to AAD tenant
@@ -139,23 +139,23 @@ Modifications to these `archetypes.json` parameters are required in order to suc
 | AAD Tenant where users and groups are stored that are allowed to interact with the AKS cluster through kubernetes RBAC integration. A reference can be found https://docs.microsoft.com/azure/aks/aad-integration[here]. 
 
 | `${general.workload.kubernetes.cluster-admin-group-id}`
-| Unique to RBAC AAD Tenant
-| Cluster Admin persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found in the https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#deployment-assumptions[deployment assumptions] section of this document. 
+| Unique to RBAC AAD tenant
+| Cluster Admin persona AAD group in the RBAC tenant (used to manage group membership). A description of each persona can be found in the link:overview.adoc#deployment-assumptions[deployment assumptions] section of this document. 
 
 | `${general.workload.kubernetes.noc-user-group-id}`
 | Unique to RBAC AAD Tenant
-| NOC persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found in the https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#deployment-assumptions[deployment assumptions] section of this document. 
+| NOC persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found in the link:overview.adoc#deployment-assumptions[deployment assumptions] section of this document. 
 
 | `${general.workload.kubernetes.dev-user-group-id}`
 | Unique to RBAC AAD Tenant
-| Developer persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found in the https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#deployment-assumptions[deployment assumptions] section of this document. 
+| Developer persona AAD group in the RBAC Tenant (used to manage group membership). A description of each persona can be found in the link:overview.adoc#deployment-assumptions[deployment assumptions] section of this document. 
 |===
 
 == Run the deployment
 
 === Single step archetype deployment - Required permissions: Subscription Owner
 
-This section performs an end-to-end deployment of the AKS archetype. It assumes the account performing the deployment has Owner permissions to the Subscription where the archetype is being deployed. 
+This section performs an end-to-end deployment of the AKS archetype. It assumes the account performing the deployment has *Owner* permissions to the subscription where the archetype is being deployed. 
 
 Start the workload deployment by running the following commands based on the platform you are deploying from:
 
@@ -200,13 +200,13 @@ This completes the AKS archetype single step deployment.
 
 Please proceed to the link:overview.adoc#aks-cluster-topology-view[AKS Cluster Topology Diagram] for an overview of the AKS resources deployed and login instructions. 
 
-DO NOT proceed to the next deployment step if you have performed the Single Step Archetype Deployment. 
+DO NOT proceed to the next deployment step if you have performed the _Single Step Archetype Deployment_. 
 
 === Step-by-step archetype deployment - Required permissions: Based on admin role
 
 This section assumes the organization has separated administrative responsibilities into a core set of roles using role-based access control (RBAC). Please review the link:../../understand/roles.md[roles and permissions] section to understand those roles and their associated permissions. 
 
-If your account has Subscription Owner permissions you can deploy all modules with your account. 
+If your account has subscription Owner permissions you can deploy all modules with your account. 
 
 ==== Step 1: Deploy operations and monitoring resources - Required role: SysOps
 
@@ -301,7 +301,7 @@ This deployment creates the `{org}-{deployment-name}-kv-rg` resource group that 
 
 This step involves two resource deployments in the following order:
 
-- The `nsg` module creates the network security groups (NSGs) and Application security groups (ASGs) that secure the workload's virtual network. By default, the example workload net deployment creates a set of NSGs and ASGs compatible with an n-tier application, consisting of web, business, and data tiers. 
+- The `nsg` module creates the network security groups (NSGs) and application security groups (ASGs) that secure the workload's virtual network. By default, the example workload net deployment creates a set of NSGs and ASGs compatible with an n-tier application, consisting of web, business, and data tiers. 
 - The `workload-net` module creates the workload's virtual network, along with setting up the default subnet and User Defined Routes (UDRs) used to route traffic to the shared services network. This deployment also creates the VNet peering that connects the shared services and workload networks.
 
 Start the module deployments by running the following commands based on the platform you are deploying from:
@@ -391,7 +391,7 @@ This step involves multiple resource deployments in the following order:
 - The `aks-node-role-assignments` module creates the required RBAC grants to the auto-generated AKS cluster resource group.
 - The `permissions-scripts-pre-reqs` module runs scripts necessary to run custom scripts.
 - The `scripts-pre-reqs` module runs scripts necessary to run custom scripts.
-- The `create-ca-cert` module creates a CA cert using OpenSSL and places it in the key vault created in https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#step-2-deploy-key-vault---required-role-secops[Step 3].
+- The `create-ca-cert` module creates a CA cert using OpenSSL and places it in the key vault created in link:overview.adoc#step-2-deploy-key-vault---required-role-secops[Step 3].
 - The `create-cluster-rbac-role-bindings` module creates the AKS cluster roles and cluster role bindings for kubernetes RBAC integration with Azure Active Directory. 
 
 Start the module deployments by running the following commands based on the platform you are deploying from:
