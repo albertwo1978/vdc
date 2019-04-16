@@ -178,7 +178,7 @@ This deployment creates the following resource groups and AKS archetype resource
 | Resource Group | Description
 
 | `{org}-{deployment-name}-diagnostics-rg` 
-| Monitoring resources (Azure Log Anayltics, Azure Event Hub, Azure Storage)
+| Monitoring resources (Azure Log Analytics, Azure Event Hub, Azure Storage)
 
 | `{org}-{deployment-name}-kv-rg` 
 | Azure key vault for secret management.
@@ -198,13 +198,13 @@ This deployment creates the following resource groups and AKS archetype resource
 
 This completes the AKS archetype single step deployment.
 
-Please proceed to the https://github.com/albertwo1978/vdc/blob/master/docs/archetypes/aks/overview.adoc#aks-cluster-topology-view[AKS Cluster Topology Diagram] for an overview of the AKS resources deployed and login instructions. 
+Please proceed to the link:overview.adoc#aks-cluster-topology-view[AKS Cluster Topology Diagram] for an overview of the AKS resources deployed and login instructions. 
 
 DO NOT proceed to the next deployment step if you have performed the Single Step Archetype Deployment. 
 
 === Step-by-step archetype deployment - Required permissions: Based on admin role
 
-This section assumes the organization has separated administrative responsibilities into a core set of roles using role-based access control (RBAC). Please review the https://github.com/Azure/vdc/blob/master/docs/understand/roles.md[roles and permissions] section to understand those roles and their associated permissions. 
+This section assumes the organization has separated administrative responsibilities into a core set of roles using role-based access control (RBAC). Please review the link:../../understand/roles.md[roles and permissions] section to understand those roles and their associated permissions. 
 
 If your account has Subscription Owner permissions you can deploy all modules with your account. 
 
@@ -350,7 +350,7 @@ These deployments creates the `{org}-{deployment-name}-net-rg` resource group th
 
 ==== Step 4: Deploy Azure Container Registry - Required role: SysOps
 
-The next step is deploying the acr module, which creates an Azure Container Registry which is a private Docker registry in Azure for storing and managing your private Docker images.
+The next step is deploying the `acr` module, which creates an Azure Container Registry which is a private Docker registry in Azure for storing and managing your private Docker images.
 
 [ALBERTWO REVIEW - Finish comments here]
 
