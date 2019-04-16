@@ -3,7 +3,7 @@
 :toc-placement: auto
 :toclevels: 3
 
-This archetype is based on the https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/n-tier[CB REVIEW - An equivalent AKS architecture guide does not exist] reference architecture using Azure Kubernetes Services (AKS). The archetype deploys a single AKS cluster to host linux based containerized workloads.
+This archetype is based on the experience of Azure engineering working with customers using Azure Kubernetes Services (AKS). The archetype deploys a single AKS cluster to host linux based containerized workloads.
 
 == AKS Archetype description
 
