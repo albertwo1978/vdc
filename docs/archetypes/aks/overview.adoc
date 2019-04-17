@@ -38,8 +38,7 @@ Organizations may have their own container registry for managing container image
    - A description of kubernetes RBAC authorization can be found https://kubernetes.io/docs/reference/access-authn-authz/rbac/[here].
    - The scripts that implement the role bindings for the sample personas can be found https://github.com/Azure/vdc/blob/knachimuthu/aks-workload/scripts/aks/create-cluster-rbac-role-bindings.sh[here]. +
 +
->>>>>>> cf7b3751b28d080e0446b55c4b7aa638ae0aba27
-[ALBERTWO REVIEW - Formatting]   
+>>>>>>>  
 The table below provides a description of the sample personas and role bindings. You should evaluate your specific requirements and make appropriate changes:
 
 [options="header",cols="a,,"]
