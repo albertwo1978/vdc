@@ -199,7 +199,7 @@ This completes the AKS archetype single step deployment.
 
 Please proceed to the link:overview.adoc#aks-cluster-topology-view[AKS Cluster Topology Diagram] for an overview of the AKS resources deployed and login instructions. 
 
-DO NOT proceed to the next deployment step if you have performed the _Single Step Archetype Deployment_. 
+*DO NOT* proceed to the next deployment step if you have performed the _Single Step Archetype Deployment_. 
 
 === Step-by-step archetype deployment - Required permissions: Based on admin role
 
