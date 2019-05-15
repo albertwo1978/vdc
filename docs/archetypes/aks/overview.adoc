@@ -61,7 +61,7 @@ The table below provides a description of the sample personas and role bindings.
 | cluster-admin built-in cluster role
 | Reader access to AKS cluster resource groups
 
-| *NOC*
+| *Operations (NOC)*
 | view built-in cluster role extended for resource listings
 | Reader access to AKS cluster resource groups
 
