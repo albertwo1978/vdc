@@ -13,7 +13,7 @@ image:_media/vdc-aks-workload.png[VDC-AKS-WORKLOAD]
 
 === Deployed resources
 
-The following resources were deployed as part of this archetype.   
+The following resources were deployed as part of this archetype:   
 
 1. *Azure Kubernetes Services (AKS) Cluster* - The AKS cluster is the core component in the archetype. Kubernetes RBAC is enabled and Cluster Role Bindings are created and mapped for a base set of personas. Those personas are described in the link:overview.adoc#deployment-assumptions[deployment assumptions] section below. Kubernetes deploys with a core set of Namespaces (kube-system, kube-public and default). Additional Namespaces should be created as services are deployed to the cluster (ex. Ingress Controller, Applications, etc).
 
@@ -24,8 +24,8 @@ The following resources were deployed as part of this archetype.
 1. *Firewall Rule in Shared Services Archetype* - A Network Rule and Application are created in the Shared Services Azure Firewall to support the AKS archetype. The Network Rule enables SSH access, while the Application Rule enables ports 80 and 443 for fabric level management. 
 
 
-1. *Services requiring additional consideration* The following resources are also deployed as part of the AKS archetype and require additional considerations. These resources are coved in more details in the link:overview.adoc#deployment-assumptions[deployment assumptions] section below: 
-   - *Container Registry*
+1. *Services requiring additional consideration* The following resources are also deployed as part of the AKS archetype and require additional considerations. They are covered in more details in the link:overview.adoc#deployment-assumptions[deployment assumptions] section below: 
+   - *Azure Container Registry*
    - *Audit Logging* 
    - *AAD Roles*
    - *Kubernetes personas* 
