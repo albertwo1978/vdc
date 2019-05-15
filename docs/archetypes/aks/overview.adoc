@@ -19,7 +19,7 @@ The following resources were deployed as part of this archetype:
 
 1. *Azure Virtual Network w/ Subnet* - A virtual network and subnet are created to host the AKS Cluster Agent Nodes. This VNet is then peered with the Shared Services VNet in a hub-and-spoke model. A Network Security Group, Route Table and DDOS policy are created to support traffic shaping and offer protection against DDOS attacks. 
 
-1. *Azure Key Vault* - A Key Vault is deployed as part of the archetype and is intended to host secrets used to manage the AKS cluster and applications hosted in the cluster. No keys/certs are created in the Key Vault as part of the deployment. 
+1. *Azure Key Vault* - A Key Vault is deployed as part of the archetype and is intended to host secrets used to manage the AKS cluster and applications hosted in the cluster. A demo CA cert is created by OpenSSL and stored in the key vault.
 
 1. *Firewall Rule in Shared Services Archetype* - A Network Rule and Application are created in the Shared Services Azure Firewall to support the AKS archetype. The Network Rule enables SSH access, while the Application Rule enables ports 80 and 443 for fabric level management. 
 
@@ -277,7 +277,7 @@ These deployments creates the `{org}-{deployment-name}-diagnostics-rg` resource 
 
 The next step is deploying the kv module, which creates a Key Vault resource.
    - The key vault resource is added as a service endpoint to the AKS virtual network.
-   - A demo CA cert is created by OpenSSL and stored in the key vault. [ALBERTWO REVIEW - Sync with Kirk about Digicert to replace OpenSSL cert.]
+   - A demo CA cert is created by OpenSSL and stored in the key vault. 
 
 Secrets defined in the `archetype.json` as well as creating encryption keys (used in Azure Disk Encryption extension) are stored in the Key Vault and are used by other resources will use in subsequent deployment steps.
 
@@ -368,9 +368,7 @@ These deployments creates the `{org}-{deployment-name}-net-rg` resource group th
 
 ==== Step 4: Deploy Azure Container Registry - Required role: SysOps
 
-The next step is deploying the `acr` module, which creates an Azure Container Registry which is a private Docker registry in Azure for storing and managing your private Docker images.
-
-[ALBERTWO REVIEW - Finish comments here]
+The next step is deploying the `acr` module, which creates an Azure Container Registry which is a private Docker registry in Azure for storing and managing your private Docker images. Image pull RBAC rights to the ACR instance have been granted to the cluster service principal. 
 
 Start the module deployment by running the following command based on the platform you are deploying from:
 
