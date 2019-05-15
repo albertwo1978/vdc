@@ -9,7 +9,7 @@ This archetype is based on the experience of Azure engineering working with cust
 
 An overview diagram of the Azure resources and identities created as part of this archetype: 
 
-image:_media/placeholder_image.png[ALBERTWO REVIEW - Need diagram]
+image:_media/vdc-aks-workload.png
 
 === Deployment assumptions
 
