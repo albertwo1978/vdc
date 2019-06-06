@@ -226,32 +226,40 @@ This section assumes the organization has separated administrative responsibilit
 
 If your account has subscription Owner permissions you can deploy all modules with your account. 
 
-==== Step 1: Deploy operations and monitoring resources - Required role: SysOps
+==== Step 1: Deploy operations and monitoring resources - Required role: SecOps
 
-This step pre-provisions target resources that will be used for collection and analysis Azure Kubernetes Service (AKS) logging data. 
+This step pre-provisions target resources that will be used for collection and analysis of Azure Kubernetes Service (AKS) operational and security data. 
 
 Later in the workload deployment process, kubernetes master node logging is enabled in the Azure Kubernetes Service (AKS) environment and logs are passed to these target resources for collection and analysis. More details on master node logging in AKS can be found https://docs.microsoft.com/azure/aks/view-master-logs[here]. 
 
-Two modules are deployed in this step:
+Four modules are deployed in this step:
 
-- The `la` module creates the log analytics workspace and Azure storage account used for collecting and analyzing Azure Monitor logs. 
+- The `diagnostic-storage-account` module enables diagnostic logging and creates the Azure storage account used for collecting those logs. 
+- The `la` module creates the log analytics workspace and multiple oms solutions to provide additional insights on logs collected. 
+- The `security-center` module enables the Azure security center standard pricing tier and enables it on virtual machines, storage accounts and log analytics.
 - The `event-hub` module creates an Azure Event Hub namespace and default Event Hub, along with setting up the default authorization rules. 
 
 Start the module deployments by running the following commands based on the platform you are deploying from:
 
 .Docker
 [source,bash]
+python vdc.py create workload -path archetypes/aks/archetypes.json -m diagnostic-storage-account
 python vdc.py create workload -path archetypes/aks/archetypes.json -m la
+python vdc.py create workload -path archetypes/aks/archetypes.json -m security-center
 python vdc.py create workload -path archetypes/aks/archetypes.json -m event-hub
 
 .Linux/OSX
 [source,bash]
+python3 vdc.py create workload -path archetypes/aks/archetypes.json -m diagnostic-storage-account
 python3 vdc.py create workload -path archetypes/aks/archetypes.json -m la
+python3 vdc.py create workload -path archetypes/aks/archetypes.json -m security-center
 python3 vdc.py create workload -path archetypes/aks/archetypes.json -m event-hub
 
 .Windows
 [source,cmd]
+py vdc.py create workload -path archetypes/aks/archetypes.json -m diagnostic-storage-account
 py vdc.py create workload -path archetypes/aks/archetypes.json -m la
+py vdc.py create workload -path archetypes/aks/archetypes.json -m security-center
 py vdc.py create workload -path archetypes/aks/archetypes.json -m event-hub
 
 These deployments creates the `{org}-{deployment-name}-diagnostics-rg` resource group that hosts the resources described in the following table.
@@ -260,20 +268,79 @@ These deployments creates the `{org}-{deployment-name}-diagnostics-rg` resource 
 |===
 | Resource | Type | Description
 
-| `{org}-{deployment-name}-la`
-| Log Analytics
-| Log Analytics instance for monitoring the AKS cluster workload.
-
 | `{org}{deployment-name}diag{uniquestring}` (dashes removed)
 | Storage Account
 | Storage Account for collecting AKS workload logs.
 
 | `{org}-{deployment-name}-la`
+| Log Analytics workspace
+| Log Analytics instance for monitoring the AKS cluster workload.
+
+| `OMS Solutions`
+| Solution
+| AntiMalware, AzureAutomations, ChangeTracking, KeyVaultAnalytics, Security, SecurityCenterFree, SQLAssessment and Updates. 
+
+| `{org}eventhubnamespace`
 | Event Hub Namespace
 | Event Hub Namespace with `{org}-diagnostics-eventhub` Event Hub for collecting AKS workload logs. 
 |===
 
-==== Step 2: Deploy Key Vault - Required role: SecOps
+==== Step 2: Deploy the virtual network - Required role: NetOps 
+
+This step involves three resource deployments in the following order:
+
+- The `nsg` module creates the network security groups (NSGs) and application security groups (ASGs) that secure the workload's virtual network. By default, the example workload net deployment creates a set of NSGs and ASGs compatible with an n-tier application, consisting of web, business, and data tiers. 
+- The `workload-net` module creates the workload's virtual network, along with setting up the default subnet and User Defined Routes (UDRs) used to route traffic to the shared services network. This deployment also creates the VNet peering that connects the shared services and workload networks.
+- The `enable-service-endpoint-on-diagnostic-storage-account` module enables service endpoints for the diagnostic storage account for enhanced security. on the workload virtual network hostinthe workload's virtual network, along with setting up the default subnet and User Defined Routes (UDRs) used to route traffic to the shared services network. This deployment also creates the VNet peering that connects the shared services and workload networks.
+
+Start the module deployments by running the following commands based on the platform you are deploying from:
+
+.Docker
+[source,bash]
+python vdc.py create workload -path archetypes/aks/archetypes.json -m nsg
+python vdc.py create workload -path archetypes/aks/archetypes.json -m workload-net
+python vdc.py create workload -path archetypes/aks/archetypes.json -m enable-service-endpoint-on-diagnostic-storage-account
+
+.Linux/OSX
+[source,bash]
+python3 vdc.py create workload -path archetypes/aks/archetypes.json -m nsg
+python3 vdc.py create workload -path archetypes/aks/archetypes.json -m workload-net
+python3 vdc.py create workload -path archetypes/aks/archetypes.json -m enable-service-endpoint-on-diagnostic-storage-account
+
+.Windows
+[source,cmd]
+py vdc.py create workload -path archetypes/aks/archetypes.json -m nsg
+py vdc.py create workload -path archetypes/aks/archetypes.json -m workload-net
+py vdc.py create workload -path archetypes/aks/archetypes.json -m enable-service-endpoint-on-diagnostic-storage-account
+
+These deployments creates the `{org}-{deployment-name}-net-rg` resource group that hosts the resources described in the following table.
+
+[options="header",cols="a,,a"]
+|===
+| Resource | Type | Description
+
+| `{org}-{deployment-name}-vnet`
+| Virtual network
+| The primary workload's virtual network with a single `default` subnet.
+
+| `{org}-{deployment-name}-{defaultsubnetname}-nsg`
+| Network security group
+| Network security group attached to the `default` subnet.
+
+| `{org}-{deployment-name}-{defaultsubnetname}-udr`
+| Route table
+| User Defined Routes for routing traffic to and from the shared services and on-premises networks.
+
+| `{org}-{deployment-name}-ddos-plan`
+| DDOS protection plan
+| Azure Standard DDOS protection plan.
+
+| `{org}{deployment-name}diag{uniquestring}` (dashes removed)
+| Storage account 
+| Storage location for virtual network diagnostic data.
+|===
+
+==== Step 3: Deploy Key Vault - Required role: SecOps
 
 The next step is deploying the kv module, which creates a Key Vault resource.
    - The key vault resource is added as a service endpoint to the AKS virtual network.
@@ -313,57 +380,6 @@ This deployment creates the `{org}-{deployment-name}-kv-rg` resource group that 
 | `{org}{deployment-name}kvdiag{uniquestring}` (dashes removed)
 | Storage account
 | Location of Key Vault audit logs.
-|===
-
-==== Step 3: Deploy the virtual network - Required role: NetOps 
-
-This step involves two resource deployments in the following order:
-
-- The `nsg` module creates the network security groups (NSGs) and application security groups (ASGs) that secure the workload's virtual network. By default, the example workload net deployment creates a set of NSGs and ASGs compatible with an n-tier application, consisting of web, business, and data tiers. 
-- The `workload-net` module creates the workload's virtual network, along with setting up the default subnet and User Defined Routes (UDRs) used to route traffic to the shared services network. This deployment also creates the VNet peering that connects the shared services and workload networks.
-
-Start the module deployments by running the following commands based on the platform you are deploying from:
-
-.Docker
-[source,bash]
-python vdc.py create workload -path archetypes/aks/archetypes.json -m nsg
-python vdc.py create workload -path archetypes/aks/archetypes.json -m workload-net
-
-.Linux/OSX
-[source,bash]
-python3 vdc.py create workload -path archetypes/aks/archetypes.json -m nsg
-python3 vdc.py create workload -path archetypes/aks/archetypes.json -m workload-net
-
-.Windows
-[source,cmd]
-py vdc.py create workload -path archetypes/aks/archetypes.json -m nsg
-py vdc.py create workload -path archetypes/aks/archetypes.json -m workload-net
-
-These deployments creates the `{org}-{deployment-name}-net-rg` resource group that hosts the resources described in the following table.
-
-[options="header",cols="a,,a"]
-|===
-| Resource | Type | Description
-
-| `{org}-{deployment-name}-vnet`
-| Virtual network
-| The primary workload's virtual network with a single `default` subnet.
-
-| `{org}-{deployment-name}-{defaultsubnetname}-nsg`
-| Network security group
-| Network security group attached to the `default` subnet.
-
-| `{org}-{deployment-name}-udr`
-| Route table
-| User Defined Routes for routing traffic to and from the shared services and on-premises networks.
-
-| `{org}-{deployment-name}-ddos-plan`
-| DDOS protection plan
-| Azure Standard DDOS protection plan.
-
-| `{org}{deployment-name}diag{uniquestring}` (dashes removed)
-| Storage account 
-| Storage location for virtual network diagnostic data.
 |===
 
 ==== Step 4: Deploy Azure Container Registry - Required role: SysOps
