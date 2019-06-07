@@ -413,11 +413,11 @@ While provisioning AKS, the Service Principal provided to the cluster is granted
 - Contributor access to the `MC_{org}-{deployment-name}-rg_{org}-{deployment-name}-k8s_{region}` Resource Group created to host the AKS resources.
 - Read/join access to the virtual network where the AKS cluster is deployed. 
 
-The Account/Service Principal used to deploy AKS requires Owner permissions at the Subscription level in order to assign these permissions to the Service Principal during the deployment. 
+The Account/Service Principal used to deploy AKS requires Owner permissions at the Subscription level in order to assign access rights to the Service Principal during the deployment. 
 
-Alternatively, the Service Principal provided to the cluster can be delegated permissions prior to the deployment. Doing so would allow the Account/Service Principal used to deploy AKS to only require Contributor access at the Subscription level. 
+Alternatively, the Service Principal provided to the cluster can be delegated access rights prior to the deployment. Doing so would allow the Account/Service Principal used to deploy AKS to only require Contributor permissions at the Subscription level. 
 
-For more information on how to delegate access to the AKS Service Principal, please reference the Delegated Access section of the AKS Service Principal document https://docs.microsoft.com/en-us/azure/aks/kubernetes-service-principal#delegate-access-to-other-azure-resources[here]. 
+For more information on how to delegate access to the AKS Service Principal prior to deployment, please reference the Delegated Access section of the AKS Service Principal document https://docs.microsoft.com/en-us/azure/aks/kubernetes-service-principal#delegate-access-to-other-azure-resources[here]. 
 
 *Deploying AKS*
 
@@ -469,7 +469,7 @@ This deployment creates the following resource groups and AKS archetype resource
 | Azure AKS resource type for the managed kubernetes cluster.
 
 | `MC_{org}-{deployment-name}-rg_{org}-{deployment-name}-k8s_{region}`
-| Azure key vault for secret management.
+| The Resource Group created to host AKS resources such as Agent Node virtual machines, disks, network interfaces and availability sets.
 |===
 
 == AKS cluster topology view
