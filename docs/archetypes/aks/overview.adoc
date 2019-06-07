@@ -406,7 +406,7 @@ This deployment creates the `{org}-{deployment-name}-acr-rg` resource group that
 
 Once the monitoring, Key Vault, virtual network resources and Azure Container Registry are provisioned, your team can begin deploying the AKS workload resources. 
 
-=== Account Permissions
+===== Account Permissions
 
 While provisioning AKS, the Service Principal provided to the cluster is granted delegated access to create and manage certain Azure resources. A few examples are:
 
@@ -419,7 +419,7 @@ Alternatively, the Service Principal provided to the cluster can be delegated pe
 
 For more information on how to delegate access to the AKS Service Principal, please reference the Delegated Access section of the AKS Service Principal document https://docs.microsoft.com/en-us/azure/aks/kubernetes-service-principal#delegate-access-to-other-azure-resources[here]. 
 
-=== Deploying AKS
+===== Deploying AKS
 
 This step involves multiple resource deployments in the following order:
 
