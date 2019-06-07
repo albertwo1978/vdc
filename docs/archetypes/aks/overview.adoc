@@ -402,10 +402,24 @@ This deployment creates the `{org}-{deployment-name}-acr-rg` resource group that
 | Azure Container Registry for storing and managing private Docker images.
 |===
 
-==== Step 5: Deploy AKS workload resources - Required role: ??? 
-[CB REVIEW - Account needs Sub Owner permissions - ANNA FEEDBACK - Can lesser permissions be used?]
+==== Step 5: Deploy AKS workload resources - Required role: Subscription Owner 
 
 Once the monitoring, Key Vault, virtual network resources and Azure Container Registry are provisioned, your team can begin deploying the AKS workload resources. 
+
+=== Account Permissions
+
+While provisioning AKS, the Service Principal provided to the cluster is granted delegated access to create and manage certain Azure resources. A few examples are:
+
+- Contributor access to the `MC_{org}-{deployment-name}-rg_{org}-{deployment-name}-k8s_{region}` Resource Group created to host the AKS resources.
+- Read/join access to the virtual network where the AKS cluster is deployed. 
+
+The Account/Service Principal used to deploy AKS requires Owner permissions at the Subscription level in order to assign these permissions to the Service Principal during the deployment. 
+
+Alternatively, the Service Principal provided to the cluster can be delegated permissions prior to the deployment. Doing so would allow the Account/Service Principal used to deploy AKS to only require Contributor access at the Subscription level. 
+
+For more information on how to delegate access to the AKS Service Principal, please reference the Delegated Access section of the AKS Service Principal document https://docs.microsoft.com/en-us/azure/aks/kubernetes-service-principal#delegate-access-to-other-azure-resources[here]. 
+
+=== Deploying AKS
 
 This step involves multiple resource deployments in the following order:
 
