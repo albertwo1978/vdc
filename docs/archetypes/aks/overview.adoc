@@ -340,8 +340,8 @@ This step deploys four modules in the following order:
 
 - The `kv` module deploys Azure Key Vault as a Service Endpoint to the AKS virtual network.
 - The `permissions-scripts-pre-reqs` module runs scripts necessary to run custom scripts.
-- The `scripts-pre-reqs` module runs scripts necessary to run custom scripts.
-- A demo CA cert is created by OpenSSL and stored in the key vault. 
+- The `scripts-pre-reqs` module downloads resources and runs scripts necessary to run custom scripts.
+- The `create-ca-cert` module creates a demo CA cert using OpenSSL and stores it in the Key Vault. Permissions to create the certificate in Key Vault are granted to the `deployment-user-id` identified in the `archetypes.json` deployment file.
 
 Secrets defined in the `archetypes.json` as well as future encryption keys (used in Azure Disk Encryption extension) will be stored in the Key Vault and used by other resources in subsequent deployment steps.
 
@@ -383,14 +383,14 @@ This deployment creates the `{org}-{deployment-name}-kv-rg` resource group that 
 | Key Vault
 | Key Vault instance for the workload. One certificate deployed by default.
 
-| `{org}-{deployment-name}-kv` 
+| `{org}-{deployment-name}-ca` 
 | Certificate
-| Sample Certificate with access rights granted to the `deployment-user-id` identified in the `archetypes.json` deployment file.
+| Sample certification uploaded to the Key Vault. 
 |===
 
 ==== Step 4: Deploy Azure Container Registry - Required role: DevOps
 
-The next step is deploying the `acr` module, which creates an Azure Container Registry which is a private Docker registry in Azure for storing and managing your private Docker images. Image pull RBAC rights to the ACR instance have been granted to the cluster service principal. 
+The next step is deploying the `acr` module, which creates an Azure Container Registry which is a private Docker registry in Azure for storing and managing your private Docker images. Image pull RBAC rights to the ACR instance are also granted to the cluster service principal. 
 
 Start the module deployment by running the following command based on the platform you are deploying from:
 
@@ -473,7 +473,7 @@ This deployment creates the following resource groups and AKS archetype resource
 | Resource Group | Description
 
 | `{org}-{deployment-name}-rg` 
-| Azure AKS resource type for the managed kubernetes cluster.
+| The Resouce Group for hosting `{org}-{deployment-name}-aks`, the Azure AKS resource type for the managed kubernetes cluster.
 
 | `MC_{org}-{deployment-name}-rg_{org}-{deployment-name}-k8s_{region}`
 | The Resource Group created to host AKS resources such as Agent Node virtual machines, disks, network interfaces and availability sets.
