@@ -34,7 +34,7 @@
         "value": 2
     },
     "virtualMachine-size": {
-        "value": "Standard_DS12_v2"
+        "value": "Standard_DS14_v2"
     },
     "domain-name": {
         "value": "${shared-services.active-directory.domain-name}"
@@ -61,9 +61,6 @@
     },
     "sql-server-start-ip-address": {
         "value": "${workload.vm-configuration.sql-server-start-ip-address}"
-    },
-    "sql-server-cluster-ip-address": {
-        "value": "${workload.vm-configuration.sql-server-cluster-ip-address}"
     },
     "sql-server-ilb-ip-address": {
         "value": "${workload.vm-configuration.sql-server-ilb-ip-address}"
